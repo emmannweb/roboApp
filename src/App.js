@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import Card from "./Components/card.js";
+import Card from "./Components/card";
+import Search from "./Components/Search";
 
 import "./App.css";
 
@@ -13,11 +14,20 @@ class App extends Component {
     };
   }
 
-  componentDidMount() {
+  fetchApi = () => {
     fetch("https://jsonplaceholder.typicode.com/users/").then(response =>
-      response.json().then(users => this.setState({ Robots: users }))
+      response.json().then(result => this.setState({ Robots: result }))
     );
+  };
+
+  SearchField = e => {
+    this.setState({ SearchRobot: e.target.value });
+  };
+
+  componentDidMount() {
+    this.fetchApi();
   }
+
   render() {
     const { Robots, SearchRobot } = this.state;
     const FilterRobots = Robots.filter(filterRobot =>
@@ -29,12 +39,7 @@ class App extends Component {
           <div className="header">
             <h1> Robots App</h1>
           </div>
-          <input
-            type="search"
-            placeholder="Search a Robot"
-            className="search__input"
-            onChange={e => this.setState({ SearchRobot: e.target.value })}
-          />
+          <Search PropSearch={this.SearchField} />
 
           <div className="container">
             <div className="row">
